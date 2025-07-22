@@ -68,32 +68,6 @@
       height: 100%;
       object-fit: cover;
     }
-
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: fall 5s linear infinite;
-    }
-
-    .heart::before, .heart::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-    }
-
-    .heart::before { top: -10px; left: 0; }
-    .heart::after  { left: -10px; top: 0; }
-
-    @keyframes fall {
-      0% { top: -10px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
-    }
   </style>
 </head>
 <body>
@@ -107,9 +81,17 @@
   <script>
     function startLove() {
       document.getElementById("start-screen").style.display = "none";
-      const audio = document.getElementById("bg-music");
-      audio.play().catch(e => console.log("Autoplay gagal, harus interaksi user."));
 
+      const audio = document.getElementById("bg-music");
+
+      // Audio play pakai user interaksi agar tidak dihentikan browser
+      audio.play().then(() => {
+        console.log("Audio started");
+      }).catch(err => {
+        console.log("Audio autoplay blocked, coba lagi setelah klik:", err);
+      });
+
+      // Floating texts
       const texts = ["I love you sayangg", "I miss you sayang", "ngeselin", "nyebelin"];
       for (let i = 0; i < 30; i++) {
         const text = document.createElement("div");
@@ -121,6 +103,7 @@
         document.body.appendChild(text);
       }
 
+      // Floating images
       const images = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
       for (let i = 0; i < 10; i++) {
         const profile = document.createElement("div");
@@ -132,16 +115,6 @@
         profile.appendChild(img);
         document.body.appendChild(profile);
       }
-
-      // Hati jatuh
-      setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-      }, 300);
     }
   </script>
 </body>
