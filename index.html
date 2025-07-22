@@ -1,99 +1,77 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Untuk Sayang</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Untuk Sayangku</title>
   <style>
     body {
       margin: 0;
-      background: black;
       overflow: hidden;
-      font-family: sans-serif;
+      background: linear-gradient(to bottom, #000000, #330000);
+      font-family: Arial, sans-serif;
     }
-
-    #start-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    #start-screen button {
-      font-size: 48px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      text-shadow: 0 0 10px white, 0 0 20px white;
-    }
-
-    #start-screen p {
-      color: white;
-      font-size: 20px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
     .floating-text {
       position: absolute;
-      color: #00ffff;
-      font-size: 28px;
-      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-      animation: fall-down 20s linear infinite;
+      color: white;
+      font-weight: bold;
+      animation: floatText 10s linear infinite;
+      text-shadow: 0 0 10px red;
     }
-
-    .profile {
+    .falling-heart {
+      position: absolute;
+      color: red;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100px); }
+      100% { transform: translateY(100vh); }
+    }
+    @keyframes floatText {
+      0% { transform: translateY(0); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    .profile-pic {
       position: absolute;
       width: 80px;
       height: 80px;
-      border-radius: 12px;
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
       overflow: hidden;
-      animation: fall-down 25s linear infinite;
-      box-shadow: 0 0 10px #fff;
     }
-
-    .profile img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
     }
-
-    @keyframes fall-down {
-      0% {
-        transform: translateY(-200px) rotate(0deg);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+    #start-screen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+    }
+    #start-screen button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: red;
+      border: none;
+      border-radius: 10px;
+      color: white;
     }
   </style>
 </head>
 <body>
-
-  <!-- Tombol Start -->
   <div id="start-screen">
-    <button onclick="startLove()">💖 Mulai 💖</button>
-    <p>Pastikan volume kamu nyala yaa :)</p>
+    <h2>Untuk sayangku 💖</h2>
+    <button onclick="startLove()">Klik untuk mulai</button>
   </div>
 
-  <!-- Musik -->
-  <audio id="bg-music" loop preload="auto">
-    <source src="sempurna.mp3" type="audio/mpeg" />
-    Your browser does not support the audio tag.
-  </audio>
+  <audio id="bg-music" src="sempurna.mp3" loop preload="auto"></audio>
 
   <script>
     function startLove() {
@@ -101,39 +79,47 @@
 
       const music = document.getElementById("bg-music");
       music.volume = 1.0;
-      music.load();
-      music.play().catch((e) => {
-        console.log("Autoplay blocked, manual interaction required", e);
-        alert("Tekan lagi jika musik belum nyala!");
+      music.play().catch(() => {
+        alert("Klik sekali lagi kalau musik belum nyala ya sayang 🥺");
       });
 
-      const texts = [
-        "I love you sayangg",
-        "I miss you sayang",
-        "ngeselin",
-        "nyebelin"
-      ];
-
+      const texts = ["I love you sayangg", "I miss you sayang", "ngeselin", "nyebelin"];
       for (let i = 0; i < 30; i++) {
         const text = document.createElement("div");
         text.className = "floating-text";
-        text.textContent = texts[Math.floor(Math.random() * texts.length)];
+        text.textContent = texts[i % texts.length];
         text.style.left = Math.random() * window.innerWidth + "px";
         text.style.top = Math.random() * window.innerHeight + "px";
-        text.style.fontSize = 20 + Math.random() * 20 + "px";
+        text.style.fontSize = (Math.random() * 15 + 16) + "px";
         document.body.appendChild(text);
       }
 
       const images = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
       for (let i = 0; i < 10; i++) {
         const profile = document.createElement("div");
-        profile.className = "profile";
-        const img = document.createElement("img");
-        img.src = images[Math.floor(Math.random() * images.length)];
+        profile.className = "profile-pic";
         profile.style.left = Math.random() * window.innerWidth + "px";
         profile.style.top = Math.random() * window.innerHeight + "px";
+
+        const img = document.createElement("img");
+        img.src = images[i % images.length];
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.borderRadius = "50%";
+        img.style.objectFit = "cover";
+
         profile.appendChild(img);
         document.body.appendChild(profile);
+      }
+
+      for (let i = 0; i < 40; i++) {
+        const heart = document.createElement("div");
+        heart.className = "falling-heart";
+        heart.textContent = "❤️";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = Math.random() * window.innerHeight + "px";
+        heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+        document.body.appendChild(heart);
       }
     }
   </script>
